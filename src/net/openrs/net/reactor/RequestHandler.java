@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Queue;
 
 import net.openrs.net.io.Message;
 
@@ -46,14 +47,21 @@ public final class RequestHandler {
 		ByteBuffer buffer = session.getOutBuffer();
 		SocketChannel socketChannel = (SocketChannel) session.getSelectionKey().channel();
 
-		// Send the data.
-		buffer.flip();
-		if (socketChannel.write(buffer) < buffer.remaining()) {
-			// Not everything was sent, compact the buffer.
-			buffer.compact();
-			return;
+		// Encode each message into the buffer.
+		Queue<Message> q = session.getOutQueue();
+		while (!q.isEmpty()) {
+			buffer.put(session.getEncoder().encode(q.poll()));
 		}
-		buffer.clear();
+		buffer.flip();
+
+		// Send the data.
+		socketChannel.write(buffer);
+		if (buffer.hasRemaining()) {
+			buffer.compact(); // Could not send everything.
+		} else {
+			buffer.clear();
+			session.getSelectionKey().interestOps(SelectionKey.OP_READ);
+		}
 	}
 
 }

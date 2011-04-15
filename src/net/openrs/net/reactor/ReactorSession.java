@@ -3,11 +3,14 @@ package net.openrs.net.reactor;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import net.openrs.event.EventProducer;
 import net.openrs.net.codec.CodecFactory;
 import net.openrs.net.codec.Decoder;
 import net.openrs.net.codec.Encoder;
+import net.openrs.net.io.Message;
 import net.openrs.util.Configuration;
 
 /**
@@ -36,6 +39,8 @@ public final class ReactorSession extends EventProducer {
 
 	private final Decoder decoder = CodecFactory.getInstance().getDecoder(this);
 
+	private final Queue<Message> outQ = new LinkedList<Message>();
+
 	private State state = State.CONNECTED;
 
 	/**
@@ -49,6 +54,11 @@ public final class ReactorSession extends EventProducer {
 	public ReactorSession(Selector selector, SelectionKey selectionKey) {
 		this.selector = selector;
 		this.selectionKey = selectionKey;
+	}
+
+	public void send(Message message) {
+		getOutQueue().offer(message);
+		selectionKey.interestOps(SelectionKey.OP_WRITE);
 	}
 
 	/**
@@ -125,6 +135,10 @@ public final class ReactorSession extends EventProducer {
 
 	public State getState() {
 		return state;
+	}
+
+	public Queue<Message> getOutQueue() {
+		return outQ;
 	}
 
 }
