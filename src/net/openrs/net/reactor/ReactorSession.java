@@ -58,7 +58,7 @@ public final class ReactorSession extends EventProducer {
 
 	public void send(Message message) {
 		getOutQueue().offer(message);
-		selectionKey.interestOps(SelectionKey.OP_WRITE);
+		selectionKey.interestOps(selectionKey.interestOps() | SelectionKey.OP_WRITE);
 	}
 
 	/**

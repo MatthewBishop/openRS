@@ -60,7 +60,8 @@ public final class RequestHandler {
 			buffer.compact(); // Could not send everything.
 		} else {
 			buffer.clear();
-			session.getSelectionKey().interestOps(SelectionKey.OP_READ);
+			SelectionKey key = session.getSelectionKey();
+			key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
 		}
 	}
 
