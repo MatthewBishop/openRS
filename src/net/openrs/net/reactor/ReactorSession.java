@@ -75,9 +75,11 @@ public final class ReactorSession extends EventProducer {
 		try {
 			if (selectionKey.isAcceptable()) {
 				RequestHandler.serveAccept(this);
-			} else if (selectionKey.isReadable()) {
+			}
+			if (selectionKey.isReadable()) {
 				RequestHandler.serveRead(this);
-			} else if (selectionKey.isWritable()) {
+			}
+			if (selectionKey.isWritable()) {
 				RequestHandler.serveWrite(this);
 			}
 		} catch (Exception ex) {
