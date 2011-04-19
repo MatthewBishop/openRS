@@ -2,11 +2,11 @@ package net.openrs.net.codec.r317.decoders;
 
 import java.nio.ByteBuffer;
 
-import net.openrs.net.codec.r317.R317Decoder;
+import net.openrs.net.codec.Decoder;
 import net.openrs.net.io.Message;
 import net.openrs.net.reactor.ReactorSession;
 
-public class R317MessageDecoder extends R317Decoder {
+public class R317MessageDecoder extends Decoder {
 
 	public R317MessageDecoder(ReactorSession session) {
 		super(session);

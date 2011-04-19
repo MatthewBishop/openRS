@@ -26,17 +26,25 @@ public class R317Decoder extends Decoder {
 
 	@Override
 	public Message decode(ByteBuffer buffer) {
+		Message message = null;
 		switch (getSession().getState()) {
 		case CONNECTED:
-			return handleServiceRequest(buffer);
+			message = handleServiceRequest(buffer);
+			break;
 		case UPDATING:
-			return updateDecoder.decode(buffer);
+			message = updateDecoder.decode(buffer);
+			break;
 		case LOGGING_IN:
-			return loginDecoder.decode(buffer);
+			message = loginDecoder.decode(buffer);
+			break;
 		case LOGGED_IN:
-			return messageDecoder.decode(buffer);
+			message = messageDecoder.decode(buffer);
+			break;
 		}
-		return null;
+		if (message != null) {
+			message.setSession(getSession());
+		}
+		return message;
 	}
 
 	private Message handleServiceRequest(ByteBuffer buffer) {

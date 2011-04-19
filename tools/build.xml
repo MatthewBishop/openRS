@@ -19,7 +19,7 @@
 	<target name="compile" depends="clean">
 		<echo>Compiling source files into bytecode...</echo>
 		<mkdir dir="${out.dir}" />
-		<javac srcdir="${src.dir}" destdir="${out.dir}" includeantruntime="false">
+		<javac srcdir="${src.dir}" destdir="${out.dir}" includeantruntime="false" debug="true" debuglevel="lines, vars, and source">
 			<classpath refid="lib.classpath" />
 		</javac>
 	</target>
