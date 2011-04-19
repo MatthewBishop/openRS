@@ -18,7 +18,8 @@ public final class RequestHandler {
 			return;
 		}
 		socketChannel.configureBlocking(false);
-		socketChannel.register(session.getSelector(), SelectionKey.OP_READ);
+		SelectionKey key = socketChannel.register(session.getSelector(), SelectionKey.OP_READ);
+		key.attach(new ReactorSession(session.getSelector(), key));
 	}
 
 	public static void serveRead(ReactorSession session) throws IOException {
@@ -26,9 +27,13 @@ public final class RequestHandler {
 		SocketChannel socketChannel = (SocketChannel) session.getSelectionKey().channel();
 
 		// Read the data.
-		if (socketChannel.read(buffer) == -1) {
+		int amount = socketChannel.read(buffer);
+		if (amount == -1) {
 			session.disconnect();
-			return;
+			return; // End of stream.
+		}
+		if (amount == 0) {
+			return; // No bytes read.
 		}
 
 		// Decode and produce the message.
@@ -61,7 +66,7 @@ public final class RequestHandler {
 		} else {
 			buffer.clear();
 			SelectionKey key = session.getSelectionKey();
-			key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
+			key.interestOps(key.interestOps() & (~SelectionKey.OP_WRITE));
 		}
 	}
 

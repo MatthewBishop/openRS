@@ -24,7 +24,7 @@ public class R317LoginDecoder extends Decoder {
 		case CONNECTED:
 			return loginRequestDecoder.decode(buffer);
 		case LOGGING_IN:
-			System.out.println("wow");
+			
 			break;
 		}
 		return null;
