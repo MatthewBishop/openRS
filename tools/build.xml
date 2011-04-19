@@ -1,0 +1,41 @@
+<project name="openRS" basedir="." default="main">
+
+	<property name="src.dir" value="../src" />
+	<property name="out.dir" value="../bin" />
+	<property name="main.class" value="net.openrs.Server" />
+	<property name="jar.file" value="../openrs.jar" />
+	<path id="lib.classpath">
+		<fileset dir="../lib" includes="**/*.jar" />
+	</path>
+	
+	<!-- Cleans the output directory. -->
+	<target name="clean">
+		<echo>Cleaning up before compilation...</echo>
+		<delete dir="${out.dir}" />
+		<delete file="${jar.file}" />
+	</target>
+	
+	<!-- Compiles the openRS source code into bytecode. -->
+	<target name="compile" depends="clean">
+		<echo>Compiling source files into bytecode...</echo>
+		<mkdir dir="${out.dir}" />
+		<javac srcdir="${src.dir}" destdir="${out.dir}" includeantruntime="false">
+			<classpath refid="lib.classpath" />
+		</javac>
+	</target>
+	
+	<!-- Deploys the compiled bytecode into an executable JAR file.-->
+	<target name="deploy">
+		<echo>Deploying openRS bytecode...</echo>
+		<manifestclasspath property="jar.classpath" jarfile="${jar.file}">
+			<classpath refid="lib.classpath" />
+		</manifestclasspath>
+		<jar destfile="${jar.file}" basedir="${out.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value="${jar.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>
