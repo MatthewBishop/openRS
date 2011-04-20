@@ -45,6 +45,7 @@ public final class RequestHandler {
 			buffer.compact();
 			return;
 		}
+		buffer.clear();
 		session.produce(message);
 	}
 

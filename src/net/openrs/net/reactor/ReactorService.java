@@ -37,6 +37,7 @@ public final class ReactorService extends EventProducer implements Service {
 		for (SelectionKey selectionKey : selector.selectedKeys()) {
 			produce(new ReactorEvent(selector, selectionKey));
 		}
+		selector.selectedKeys().clear();
 	}
 
 }
