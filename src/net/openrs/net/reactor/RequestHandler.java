@@ -36,17 +36,19 @@ public final class RequestHandler {
 			return; // No bytes read.
 		}
 
-		// Decode and produce the message.
+		// Decode and produce all messages.
 		buffer.flip();
-		Message message = null;
-		if ((message = session.getDecoder().decode(buffer)) == null) {
-			// The message is incomplete.
-			buffer.flip();
-			buffer.compact();
-			return;
+		while (buffer.hasRemaining()) {
+			Message message = null;
+			if ((message = session.getDecoder().decode(buffer)) == null) {
+				// The message is incomplete.
+				buffer.flip();
+				buffer.compact();
+				return;
+			}
+			buffer.clear();
+			session.produce(message);
 		}
-		buffer.clear();
-		session.produce(message);
 	}
 
 	public static void serveWrite(ReactorSession session) throws IOException {
