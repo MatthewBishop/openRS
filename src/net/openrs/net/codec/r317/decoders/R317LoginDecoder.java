@@ -3,6 +3,7 @@ package net.openrs.net.codec.r317.decoders;
 import java.nio.ByteBuffer;
 
 import net.openrs.net.codec.Decoder;
+import net.openrs.net.consumer.LoginBlockConsumer;
 import net.openrs.net.consumer.LoginRequestConsumer;
 import net.openrs.net.io.Message;
 import net.openrs.net.io.impl.LoginBlock;
@@ -19,7 +20,6 @@ public class R317LoginDecoder extends Decoder {
 		super(session);
 		loginRequestDecoder = new R317LoginRequestDecoder(session);
 		loginBlockDecoder = new R317LoginBlockDecoder(session);
-		new LoginRequestConsumer();
 	}
 
 	@Override

@@ -8,6 +8,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.util.logging.Logger;
 
 import net.openrs.net.codec.CodecFactory;
+import net.openrs.net.consumer.LoginBlockConsumer;
+import net.openrs.net.consumer.LoginRequestConsumer;
+import net.openrs.net.reactor.ReactorEventConsumer;
 import net.openrs.net.reactor.ReactorService;
 import net.openrs.service.ServiceEngine;
 import net.openrs.util.Configuration;
@@ -27,6 +30,11 @@ public class Server {
 			ServiceEngine engine = new ServiceEngine(Configuration.getTickrate());
 			ServiceEngine.setInstance(engine);
 			ScriptInterpreter.getInstance().loadScripts(new File(Configuration.getScriptDirectory()));
+			
+			// Create the various event consumers.
+			new ReactorEventConsumer();
+			new LoginRequestConsumer();
+			new LoginBlockConsumer();
 
 			// Network stuff.
 			CodecFactory.setInstance(Configuration.getCodecFactory());

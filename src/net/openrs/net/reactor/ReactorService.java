@@ -28,7 +28,6 @@ public final class ReactorService extends EventProducer implements Service {
 	 */
 	public ReactorService(Selector selector) {
 		this.selector = selector;
-		new ReactorEventConsumer();
 	}
 
 	@Override
