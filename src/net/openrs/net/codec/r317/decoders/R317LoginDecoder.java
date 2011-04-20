@@ -3,8 +3,6 @@ package net.openrs.net.codec.r317.decoders;
 import java.nio.ByteBuffer;
 
 import net.openrs.net.codec.Decoder;
-import net.openrs.net.consumer.LoginBlockConsumer;
-import net.openrs.net.consumer.LoginRequestConsumer;
 import net.openrs.net.io.Message;
 import net.openrs.net.io.impl.LoginBlock;
 import net.openrs.net.io.impl.LoginRequest;
